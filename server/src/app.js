@@ -20,10 +20,11 @@ const config={
 
 
 
-app.get('/game',async(req,res)=>{
+app.get('/games',async(req,res)=>{
     try{
 
-        const response=await axios.post('https://api.igdb.com/v4/games','fields name;',{headers:config});
+        const response=await axios.post('https://api.igdb.com/v4/games',`fields name,platforms,rating,cover.url; where platforms = (6) & cover !=null;limit 16;search "call of duty";
+`,{headers:config});
 
        
 
