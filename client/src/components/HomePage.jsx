@@ -1,20 +1,83 @@
-import React from 'react';
+import React, { Fragment,useState,useEffect,useContext } from 'react';
 import GameList from './GameList';
+import NavBar from './navBar';
+import { UserContext } from './Context';
 
 
 
 
 function HomePage(){
+    const { user } = useContext(UserContext);
+
+
+    
+
+  
+
+    
+   
+
+
+
+
+    useEffect(() => {
+        if (user) {
+          console.log('Usuario:', user); 
+        }else{
+            console.log('no user');
+        }
+      }, [user]);
+    
+   
 
 
     return(
-        <div>
-            <h1>Welcome to my home page</h1>
-            <GameList />
+        <Fragment>
+
+            <div className='home-container'>
+
+            <NavBar></NavBar>
+            
+          
+            <div className='w-4/5 m-auto'>
+               
+               
+        <header className="gradient text-white p-6 mb-5 mt-5 pb-36 rounded">
+         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
+           <div className="text-center md:text-left">
+           
+               <p className="text-lg mb-4">Explora una vasta colección de videojuegos, comparte tus opiniones y descubre datos interesantes sobre tus juegos favoritos.</p>
+               <input  type="text" className='mr-3 text-cyan-500' />
+               <a href="#explore" className="bg-cyan-800 py-2 px-3 rounded-md">¡Empieza a explorar!</a>
+           </div>
+          
+       </div>
+   </header>
+           
+           
+
+          
+           <GameList />
+
+           
+           </div>
+           
+           
 
 
 
-        </div>
+            </div>
+
+
+           
+            
+
+        </Fragment>
+       
+           
+
+   
+      
     )
 
 

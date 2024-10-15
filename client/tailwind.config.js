@@ -9,6 +9,10 @@ export default {
       fontFamily: {
         'gaming': ['Press Start 2P', 'cursive'], 
       },
+
+      colors: {
+        gameTalkBlue: 'rgb(0, 173, 181)'
+      }
       
     },
   },
