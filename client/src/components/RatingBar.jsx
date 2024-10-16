@@ -26,7 +26,7 @@ const RatingBar = ({onScoreChange}) => {
             onMouseMove={handleMouseMove}
             onClick={()=>{
                 setScore(score)
-                console.log(score)
+                
             }}
         >
             <div

@@ -6,7 +6,7 @@ import RatingBar from './RatingBar';
 import NavBar from './navBar';
 import AudioRecorder from './AudioRecorder';
 import TalkAbout from './TalkAboutPage';
-
+import LatestReviews from './LatestReviews';
 
 
 
@@ -155,9 +155,12 @@ function GamePage(){
                 <Fragment>
                       
 
-<NavBar> 
+    <NavBar> 
     
-</NavBar>
+    </NavBar>
+
+
+
 
      
 
@@ -207,11 +210,15 @@ function GamePage(){
 
                                 </div>
 
-                                <div>
+                                
                                 <div className={`h-16 w-16 ${getBackgroundColor()} flex justify-center items-center rounded-md`}>
+
+
                                 <div className='text-center text-white font-semibold text-4xl'>{roundedRating}</div>
-                </div>
-                                </div>
+
+
+                               </div>
+                               
 
                             
 
@@ -224,9 +231,9 @@ function GamePage(){
                             </div>
 
 
-                            <div>
-                                <TalkAbout></TalkAbout>
-                            </div>
+                          
+                                <TalkAbout gameId={id}></TalkAbout>
+                          
 
                            
                            
@@ -250,20 +257,20 @@ function GamePage(){
                     </div>
                     </div>
 
-                    <div className='w-8/12 m-auto mt-16'>
+                    <div className='w-8/12 m-auto mt-10'>
                     <h1 className='font-bold text-3xl'>Sumary</h1>
 
                     <p className='mb-3'>{gameData.summary}</p>
                     
-                    <hr />
+                    
 
 
-                    <div>
+                    <div className='pb-5'>
                         <h1 className='font-bold text-3xl'>Latest Reviews</h1>
+                        <hr  />
 
-                        <AudioRecorder>
-                            
-                        </AudioRecorder>
+                        <LatestReviews gameId={id}></LatestReviews>
+
 
 
                     </div>

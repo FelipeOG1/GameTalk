@@ -26,7 +26,7 @@ function Modal(){
     return(
       <>
 
-        <button className="button-6" onClick={handleModal}>See all platforms</button>
+<button className="button-6" onClick={handleModal}>See all platforms</button>
  {modal &&(
 
     

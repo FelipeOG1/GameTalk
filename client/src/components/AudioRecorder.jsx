@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const AudioRecorder = () => {
+const AudioRecorder = ({onChangeBlop}) => {
   const [recording, setRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -11,6 +11,7 @@ const AudioRecorder = () => {
   const dataArrayRef = useRef(null);
   const audioContextRef = useRef(null);
   const[micAnimation,setMicAnimation]=useState('mc-still')
+  
   
 
   useEffect(() => {
@@ -35,10 +36,10 @@ const AudioRecorder = () => {
           setIsSpeaking(speaking);
           if (speaking) {
             
-            setMicAnimation('mic-moving')
+            setMicAnimation('bg-cyan-100 rounded-sm')
           } else {
            
-            setMicAnimation('mic-still duration-300')
+            setMicAnimation('bg-white duration-300')
           }
         }
       }
@@ -60,7 +61,7 @@ const AudioRecorder = () => {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [recording, isSpeaking]); 
+  }, [recording, isSpeaking,onChangeBlop]); 
   const startRecording = async () => {
     audioChunks.current = []; //
 
@@ -90,11 +91,14 @@ const AudioRecorder = () => {
     };
 
    
-    recorder.onstop = () => {
+    recorder.onstop = async () => {
       
-      const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
-      const url = URL.createObjectURL(audioBlob);
-      setAudioUrl(url); 
+      const audioBlob =  new Blob(audioChunks.current, { type: 'audio/wav' });
+      const url =  URL.createObjectURL(audioBlob);
+       setAudioUrl(url);
+       onChangeBlop(audioBlob);
+      
+      
       audioContext.close(); 
     };
 
@@ -113,8 +117,8 @@ const AudioRecorder = () => {
     <>
 
       <div className='mb-3'>
-      <button onClick={recording ? stopRecording : startRecording} className={micAnimation}>
-        {recording ? <img src='../public/logos/voice.png' width={70}></img> : "Start Recording"}
+      <button onClick={recording ? stopRecording : startRecording} className={micAnimation }>
+        {recording ? <img src='../logos/microphone.png' width={70}></img> : "Start Recording"}
       </button>
       </div>
 
@@ -123,7 +127,9 @@ const AudioRecorder = () => {
       {audioUrl && <audio className='m-auto' src={audioUrl} controls />}
 
       </div>
-      
+
+
+     
    
     
     </>

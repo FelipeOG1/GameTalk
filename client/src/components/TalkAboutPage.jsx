@@ -1,4 +1,4 @@
-import React,{useState,useContext} from "react";
+import React,{useState,useContext, useEffect} from "react";
 import RatingBar from "./RatingBar";
 import AudioRecorder from "./AudioRecorder";
 import { UserContext } from "./Context";
@@ -14,16 +14,82 @@ import { Navigate,useNavigate } from "react-router-dom";
 
 
 
-function TalkAbout(){
+function TalkAbout(props){
     const { user } = useContext(UserContext);
-
     const [modal,setModal]= useState(false);
     const navigate= useNavigate();
     const [ratingScore, setRatingScore] = useState(0);
+    const [blop,setBlop]=useState('')
+    const[gameId,setGameId]=useState('');
+
+
+    useEffect(()=>{
+        setGameId(props.gameId);
+       
+
+
+
+    },[gameId])
+    
 
   const handleScoreChange = (newScore) => {
-    setRatingScore(newScore);  
+    setRatingScore(newScore); 
+    console.log(ratingScore) 
   };
+  const handleBlopChange = (newBlop) => {
+    setBlop(newBlop);
+    console.log('Nuevo blob:', newBlop);
+};
+
+const sendReview= async ()=>{
+
+    if(!ratingScore || ! blop){
+        console.log('No blop ')
+        return
+    }
+
+ setGameId(props.gameId)
+  const formData = new FormData();
+  formData.append('audio', blop, 'audio.wav');
+  formData.append('score',ratingScore);
+  formData.append('gameId',gameId)
+
+ 
+
+  
+
+
+  try {
+    const response = await fetch('http://localhost:3000/addReview', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include', // Si necesitas enviar cookies de sesión
+    });
+    console.log('datos enviados');
+    
+    const result = await response.json();
+    
+} catch (error) {
+    console.error('Error al enviar la reseña:', error);
+}
+  
+
+  
+
+ 
+
+ 
+
+           
+    
+
+
+
+
+
+
+
+}
 
 
 
@@ -60,14 +126,21 @@ function TalkAbout(){
                 <div className="pt-3 mb-3">
                     <h1>Give it a Score form 10 to a 100!</h1>
                     <RatingBar onScoreChange={handleScoreChange}></RatingBar>
+
                 </div>
 
                 <div className="pb-3">
                     
-                    <AudioRecorder> 
+                    <AudioRecorder onChangeBlop={handleBlopChange} > 
 
                     </AudioRecorder>
                 </div>
+
+
+                <div>
+                <button onClick={sendReview} className='button-6'>Send Review</button>
+                </div>
+      
 
 
     

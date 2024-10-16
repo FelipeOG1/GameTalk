@@ -11,10 +11,12 @@ import session from "express-session";
 import { fileURLToPath } from 'url';
 import path from "path";
 import { parse } from "path";
+import multer from "multer"
 
 
 dotenv.config({ path: '../.env' });
 const app=express();
+const upload = multer({ dest: 'blopsReviews/' }); 
 const saltRounds=parseInt(process.env.SALT);
 const port=process.env.PORT;
 
@@ -29,6 +31,8 @@ app.use(express.json());
 app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/blopsReviews', express.static('blopsReviews')); 
+
 
 
 
@@ -166,9 +170,7 @@ if(req.isAuthenticated()){
 
 
 app.get('/game-details/:id',async(req,res)=>{
-    console.log('Session ID:', req.sessionID);
-    console.log('User:', req.user);  
-
+   
 
 
   if(req.isAuthenticated()){
@@ -399,104 +401,60 @@ app.get('/user', (req, res) => {
 
   })
 
+  app.get('/myGames', async (req, res) => {
+    if (req.isAuthenticated()) {
+        const { id } = req.user;
 
-  
-  app.get('/myGames',async (req,res)=>{
-
-    if(req.isAuthenticated()){
-
-        
-
-        const {id}=req.user;
-    
-        
-
-        let result=[];
-    let i=0;
-    
-        try{
-            const response=await db.query('select game_id from favorites where user_id = $1',[id]);
+        try {
+          
+            const response = await db.query('SELECT game_id FROM favorites WHERE user_id = $1', [id]);
+            const gamesId = response.rows.map(row => row.game_id); 
             
-            const gamesId=response.rows
-           
+            if (gamesId.length === 0) {
+                return res.json([]); 
+            }
 
-
-            for (const id of gamesId) {
-
-                const{game_id}=id;
-
-
-                const cover = await axios.post(
-                    'https://api.igdb.com/v4/games',
-                    `fields name, summary, cover.url; where id = ${game_id};`,
-                    { headers: config }
-                  );
-                  
-                    if(cover.data[0]!=null){
-                        result[i]=cover.data[0];
-                        i++;
-
-                    }
-                  
-
-                  
-
-                  
-                  
-
-                  
-
-
-                  
-
-                  
-                    
-                
-               
-                
-                
-              }
-
-
-             
-
+            
+            const gameIdString = gamesId.map(id => `id = ${id}`).join(' | ');
 
           
+            const cover = await axios.post(
+                'https://api.igdb.com/v4/games',
+                `fields name, rating , cover.url; where ${gameIdString};`,
+                { headers: config }
+            );
 
-
-           
             
-            
-          
-    
-    
-        }catch(e){
+            console.log(cover.data)
+            res.json(cover.data || []); 
+        } catch (e) {
             console.error(e.message);
-        }finally{
-            
-               
-                console.log(result[1]);
-                res.json(result)
-           
+            res.status(500).json({ error: 'Error retrieving games' });
         }
-    
-
-
-
-   
-
-
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
     }
+});
+
+ 
+
+  
   
 
+  app.post('/addReview', upload.single('audio'), async (req, res) => {
+    const { score, gameId } = req.body;
+    const userId = req.user.id;
 
+    const audioUrl = `http://localhost:3000/${req.file.path.replace(/\\/g, '/')}`;
 
-
-
-
-        
-  })
- 
+    try {
+        await db.query('INSERT INTO reviews (user_id, game_id, score, audio_url) VALUES ($1, $2, $3, $4)', [userId, gameId, score, audioUrl]);
+        res.json({ message: 'Review added successfully!' });
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).json({ error: 'An error occurred while adding the review.' });
+    }
+});
 
 
   
@@ -505,6 +463,33 @@ app.get('/user', (req, res) => {
   app.listen(port,()=>{
     console.log(`listening`);
 })
+
+
+app.get('/gameReview/:id',async(req,res)=>{
+
+
+const {id}=req.params;
+
+
+try{
+
+    const response=await db.query('SELECT users.username, reviews.score, reviews.audio_url FROM users INNER JOIN reviews on users.id=reviews.user_id where reviews.game_id=$1 ORDER BY reviews.created_at DESC;',[id]);
+    
+   
+    const data=await response.rows;
+    res.json(data);
+
+
+
+}catch(e){
+    console.error(e.message)
+}
+
+
+
+
+})
+
 
 
 
