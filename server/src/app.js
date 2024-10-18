@@ -420,7 +420,7 @@ app.get('/user', (req, res) => {
           
             const cover = await axios.post(
                 'https://api.igdb.com/v4/games',
-                `fields name, rating , cover.url; where ${gameIdString};`,
+                `fields name, id, rating , cover.url; where ${gameIdString};`,
                 { headers: config }
             );
 
@@ -473,7 +473,7 @@ const {id}=req.params;
 
 try{
 
-    const response=await db.query('SELECT users.username, reviews.score, reviews.audio_url FROM users INNER JOIN reviews on users.id=reviews.user_id where reviews.game_id=$1 ORDER BY reviews.created_at DESC;',[id]);
+    const response=await db.query('SELECT users.username, reviews.score,reviews.audio_url FROM users INNER JOIN reviews on users.id=reviews.user_id where reviews.game_id=$1 ORDER BY reviews.created_at DESC LIMIT 3;',[id]);
     
    
     const data=await response.rows;

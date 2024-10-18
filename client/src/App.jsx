@@ -7,6 +7,7 @@ import Login from './components/Login';
 import CreateAccount from './components/CreateAccount';
 import { UserProvider } from './components/Context';
 import MyGames from './components/MyGames';
+import MyProfile from './components/MyProfile';
 
 
 
@@ -23,6 +24,7 @@ function App() {
         <Route path='/login' element= {<Login />}/>
         <Route path='/register' element={<CreateAccount />}/>
         <Route path='/MyGames' element={<MyGames />} />
+        <Route path='/MyProfile' element={<MyProfile/>}></Route>
       </Routes>
     </Router>
     </UserProvider>

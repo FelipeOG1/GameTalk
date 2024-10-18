@@ -67,8 +67,8 @@ function GameList(){
       <div className='flex flex-row gap-5 flex-wrap w-9/12 m-auto'>
         {covers.map(c=>{
           
-          return <div key={c.id} className='w-40 h-56 cursor-pointer transition-all duration-300 hover:brightness-90 hover:contrast-125' >
-            <img onClick={()=>{handleClick(c.id)}}  src={c.cover.url.replace('t_thumb', 't_cover_big')} className='w-full h-full object-cover'></img>
+          return <div key={c.id} className='image-container' >
+            <img onClick={()=>{handleClick(c.id)}}  src={c.cover.url.replace('t_thumb', 't_cover_big')} className='h-56 rounded-md'></img>
           </div>
             
           

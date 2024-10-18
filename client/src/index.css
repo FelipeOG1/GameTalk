@@ -148,6 +148,12 @@ background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,58,74,1) 39%, rgba(1
 
 }
 
+.profile-container{
+  width: 100vw;
+  height: 100vh;
+
+}
+
 
 
 .metacritic-bar {
@@ -195,4 +201,46 @@ background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,58,74,1) 39%, rgba(1
   animation: none; 
 }
 
+
+.game-title {
+  cursor:pointer;
+  white-space: nowrap;      
+  overflow: hidden;        
+  text-overflow: ellipsis;  
+  width: 170px;
+  text-decoration: underline;
+  font-weight:600;             
+}
+.game-title:hover{
+
+  text-decoration: none;
+  font-weight: 400;
+  color:gray
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;  
+}
+
+.image-container {
+  display: inline-block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.image-container img {
+  display: block;
+  width: 100%;
+  
+}
+
+.image-container:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
+}
 

@@ -49,7 +49,7 @@ function NavBar(props){
     
 
     <li className="mx-4 my-6 md:my-0">
-    {user && <a href="/MyGames">My games</a>}
+    {user && <a href="/MyProfile" className="text-xl hover:text-cyan-500 duration-500">My Profile</a>}
     </li>
 
     <li className="mx-4 my-6 md:my-0">

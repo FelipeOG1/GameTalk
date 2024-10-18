@@ -29,6 +29,14 @@ const LatestReviews = (props) => {
   }, [props.gameId]); 
 console.log(reviews)
 
+
+
+
+const roundedRating=(rating)=>{
+  return parseFloat(rating.toFixed(0));
+
+}
+
   const getBackgroundColor = (roundedRating) => {
     if (roundedRating >= 75 && roundedRating<=90) return 'bg-cyan-500';
     if (roundedRating >= 50 && roundedRating<=75) return 'bg-cyan-700';
@@ -55,7 +63,7 @@ console.log(reviews)
     
 <div className='flex flex-row gap-20 flex-wrap'>
     {reviews.length>0 && reviews.map(r=>{
-      return <div className="mt-4 w-80 pb-5 flex-flex rounded-md game-shadow">
+      return <div  className="mt-4 w-80 pb-5 flex-flex rounded-md game-shadow">
 
       <div className="flex flex-row items-center gap-3 mb-6">
       <div className={`h-13 w-10 ${getBackgroundColor(r.score)} flex justify-center items-center rounded-md py-2 px-6`}>
