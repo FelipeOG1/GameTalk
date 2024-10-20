@@ -2,7 +2,7 @@ import React, { Fragment,useState,useEffect,useContext } from 'react';
 import GameList from './GameList';
 import NavBar from './navBar';
 import { UserContext } from './Context';
-
+import PcGames from './pcGames';
 
 
 
@@ -39,7 +39,7 @@ function HomePage(){
             <NavBar></NavBar>
             
           
-            <div className='w-4/5 m-auto'>
+            <div className='w-3/4 m-auto'>
                
                
         <header className="gradient text-white p-6 mb-5 mt-5 pb-36 rounded">
@@ -56,8 +56,17 @@ function HomePage(){
            
            
 
+          <div>
+          <GameList /> 
+
+          </div>
+
+
+          <div>
+            <PcGames></PcGames>
+
+          </div>
           
-           <GameList />
 
            
            </div>

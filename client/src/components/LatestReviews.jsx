@@ -32,10 +32,7 @@ console.log(reviews)
 
 
 
-const roundedRating=(rating)=>{
-  return parseFloat(rating.toFixed(0));
 
-}
 
   const getBackgroundColor = (roundedRating) => {
     if (roundedRating >= 75 && roundedRating<=90) return 'bg-cyan-500';

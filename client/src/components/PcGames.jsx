@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function GameList(){
+function PcGames(){
     const [covers,setCovers]=useState([]);
     const navigate=useNavigate();
     const [authState,setAuthState]=useState(false);
@@ -22,7 +22,7 @@ function GameList(){
         try{
   
   
-          const response=await fetch('http://localhost:3000/consoleGames', {
+          const response=await fetch('http://localhost:3000/pcGames', {
             method: 'GET',
             credentials: 'include'
           });
@@ -74,11 +74,11 @@ function GameList(){
     }
 
     const scrollLeft = () => {
-      document.getElementById('game-carousel').scrollBy({ left: -300, behavior: 'smooth' });
+      document.getElementById('game-carousel2').scrollBy({ left: -300, behavior: 'smooth' });
   };
 
   const scrollRight = () => {
-      document.getElementById('game-carousel').scrollBy({ left: 300, behavior: 'smooth' });
+      document.getElementById('game-carousel2').scrollBy({ left: 300, behavior: 'smooth' });
   };
 
 
@@ -96,7 +96,7 @@ function GameList(){
   
     <section className='w-full relative'>
     
-    <h1 className='text-2xl font-semibold'>Highest Rated Console Games</h1>
+    <h1 className='text-2xl font-semibold'>Highest Rated Pc Games</h1>
     <div className="absolute right-3 top-3 flex gap-2 z-10">
        
         <button className="bg-black bg-opacity-50 text-white p-2 rounded-full" onClick={scrollLeft}>
@@ -108,7 +108,7 @@ function GameList(){
     </div>
     
   
-    <div id="game-carousel" className="flex overflow-x-auto no-scrollbar pt-8 gap-3">
+    <div id="game-carousel2" className="flex overflow-x-auto no-scrollbar pt-8 gap-3">
         {!loading && covers.map(g => {
             return (
                 <div key={g.id} className="flex-none">
@@ -145,5 +145,5 @@ function GameList(){
 }
 
 
-export default GameList
+export default PcGames
 

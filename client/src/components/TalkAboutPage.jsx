@@ -21,6 +21,7 @@ function TalkAbout(props){
     const [ratingScore, setRatingScore] = useState(0);
     const [blop,setBlop]=useState('')
     const[gameId,setGameId]=useState('');
+    const[review,setReview]=useState(false);
 
 
     useEffect(()=>{
@@ -38,15 +39,20 @@ function TalkAbout(props){
   };
   const handleBlopChange = (newBlop) => {
     setBlop(newBlop);
+    setReview(true);
     console.log('Nuevo blob:', newBlop);
 };
 
 const sendReview= async ()=>{
-
+    setReview(false);
     if(!ratingScore || ! blop){
         console.log('No blop ')
         return
     }
+    
+    
+
+   
 
  setGameId(props.gameId)
   const formData = new FormData();
@@ -138,7 +144,7 @@ const sendReview= async ()=>{
 
 
                 <div>
-                <button onClick={sendReview} className='button-6'>Send Review</button>
+                {review==true && <button onClick={sendReview} className='button-6'>Send Review</button>}
                 </div>
       
 
