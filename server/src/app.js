@@ -125,17 +125,31 @@ app.post(
 
 
 
-app.get('/games',async(req,res)=>{
+app.get('/newGames',async(req,res)=>{
     
-
-    
-    
-   
-
     try{
 
-    const response=await axios.post('https://api.igdb.com/v4/games',`fields id,name,platforms,rating,cover.url; where platforms = (6) & cover !=null;limit 6;search "call of duty";
-`,{headers:config});
+        const response = await axios.post('https://api.igdb.com/v4/games', `
+            fields id,name,rating,cover.url,release_dates.date,release_dates.human; 
+            where cover != null 
+            & release_dates.date > 1726700134;
+            
+            
+          `, { headers: config });
+          
+          // Filtrar resultados en el código
+          const filteredGames = response.data.filter(game => {
+            // Filtrar juegos con solo una fecha de lanzamiento y que no sean DLCs
+            return game.release_dates.length < 3;
+          });
+          
+          // Mostrar resultados filtrados
+          const timestamp = Math.floor(Date.now() / 1000); // Obtiene el timestamp en segundos
+          const month=2592000*3
+          
+          console.log(timestamp-month);
+
+
 
 
 if(req.isAuthenticated()){
@@ -489,6 +503,58 @@ try{
 
 
 })
+
+app.get('/consoleGames',async (req,res)=>{
+
+    try{
+        const response = await axios.post('https://api.igdb.com/v4/games', `
+           fields name,rating,cover.url,id; sort rating desc; where rating_count>200 & platforms.category = 1;
+           
+            
+            
+          `, { headers: config });
+
+
+          
+               console.log(response.data)
+               res.json(response.data);
+
+               
+
+    
+    }catch(e){
+    console.error(e.message);
+        }
+
+
+})
+
+
+app.get('/pcGames',async (req,res)=>{
+
+    try{
+        const response = await axios.post('https://api.igdb.com/v4/games', `
+           fields name,rating,cover.url,id; sort rating desc; where rating_count>200 & platforms.category = 6;
+           
+            
+            
+          `, { headers: config });
+
+
+          
+               console.log(response.data)
+               res.json(response.data);
+
+               
+
+    
+    }catch(e){
+    console.error(e.message);
+        }
+
+
+})
+
 
 
 
