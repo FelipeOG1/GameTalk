@@ -4,6 +4,7 @@ import { UserContext } from "./Context";
 import NavBar from "./navBar";
 import MyGames from "./MyGames";
 import MyReviews from "./MyReviews";
+import AvatarSelection from "./AvatarSelection";
 
 
 
@@ -16,6 +17,7 @@ const MyProfile=()=>{
         <>
         <div className="profile-container">
 
+            
         
 
         <div>
@@ -23,6 +25,17 @@ const MyProfile=()=>{
         </div>
 
         <div className='w-3/5 m-auto'>
+
+
+
+        <section className="mt-14">
+        
+          <AvatarSelection>
+                    
+          </AvatarSelection>
+           
+
+        </section>
 
         
         <section>

@@ -91,18 +91,11 @@ return (
 
             
         
-        <div className="absolute right-0 top-0 flex gap-2 p-2 z-10">
-                <button className="bg-black bg-opacity-50 text-white p-2 rounded-full" onClick={scrollLeft}>
-                    ←
-                </button>
-                <button className="bg-black bg-opacity-50 text-white p-2 rounded-full" onClick={scrollRight}>
-                    →
-                </button>
-            </div>
+       
 
             </div>
         
-            <div id="game-carousel" className="flex overflow-x-auto no-scrollbar pt-8 gap-3">
+            <div id="game-carousel" className="flex flex-wrap pt-8 gap-3">
                 {!loading && games.map(g => {
                     return (
                         <div key={g.id} className="flex-none ">
