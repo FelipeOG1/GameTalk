@@ -1,13 +1,14 @@
-import { useState,useEffect, Fragment } from 'react'
+import { useState,useEffect, Fragment,useContext } from 'react'
 import { useParams } from 'react-router-dom';
-import Modal from './Modal';
+import AllPlatforms from '../components/AllPlatforms';
 import Login from './Login';
-import RatingBar from './RatingBar';
-import NavBar from './navBar';
-import AudioRecorder from './AudioRecorder';
+import RatingBar from '../components/RatingBar';
+import NavBar from '../components/navBar';
+import AudioRecorder from '../components/AudioRecorder';
 import TalkAbout from './TalkAboutPage';
-import LatestReviews from './LatestReviews';
-
+import LatestReviews from '../components/LatestReviews';
+import AddGameButton from '../components/AddGameButton';
+import { UserContext } from "../components/Context";
 
 
 
@@ -18,11 +19,16 @@ import LatestReviews from './LatestReviews';
 
 function GamePage(){
     const {id}=useParams();
-
+    const { user } = useContext(UserContext); 
     const [gameData,setGameData]=useState([]);
 
     const [loading,setLoading]=useState(true);
-    const [authState,setAuthState]=useState(false);
+    
+    const[isFavorite,setIsFavorite]=useState(false);
+    const [primaryPlatform,setPrimaryPlatform]=useState('');
+    const [releaseDate,setReleaseDate]=useState('');
+    const [platforms,setPlatforms]=useState([]);
+
 
 
     async function handleSubmit(e){
@@ -72,11 +78,15 @@ function GamePage(){
                 credentials: 'include'  
             });
             const data = await response.json();
+            
            setGameData(data.gameDetails[0]);
+           setIsFavorite(data.isFavorite);
+           setPrimaryPlatform(data.primaryPlatform);
+           setReleaseDate(data.releaseDate)
+           setPlatforms(data.platforms)
+         
+            
            
-
-        
-           console.log(data.AuthState);
 
 
            
@@ -108,7 +118,14 @@ function GamePage(){
     
    },[id]);
 
+console.log(platforms)
    
+
+if(user){
+    console.log(user.id);
+}
+
+
 
 
    
@@ -192,14 +209,14 @@ function GamePage(){
 
                             <div className='flex gap-5 mt-3 items-center mb-4'>
 
-                            <h1 className='text-2xl font-bold'>{mainPlatform}</h1>
-                            <Modal>
-                                
-                            </Modal>
-                        
+                            <h1 className='text-2xl font-bold'>{primaryPlatform}</h1>
+
+
+                            {platforms.length>1 && <AllPlatforms platforms={platforms}></AllPlatforms>}
+                           
                             </div>
                             
-                            <h3 className='mb-3'><span className='font-semibold '>Released on:</span> {gameData.release_dates[0].human}</h3>
+                            <h3 className='mb-3'><span className='font-semibold '>Released on:</span> {releaseDate}</h3>
                             <hr className='mb-4' />
 
                             <div className='flex justify-between'>
@@ -225,9 +242,12 @@ function GamePage(){
                             </div>
 
 
-                            <div className='mb-3'>
-                                <h1>Add to favorites</h1>
-                                <button onClick={handleSubmit} className='border-2 border-black'>Add</button>
+                            <div className='mt-3 mb-3'>
+                                {user? <AddGameButton gameId={id} originalState={isFavorite} userId={user.id}></AddGameButton>: <AddGameButton></AddGameButton>}
+                               
+                                
+                           
+
                             </div>
 
 

@@ -1,6 +1,6 @@
 import React, {useState,useContext} from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "./Context";
+import { UserContext } from "../components/Context";
 
 
    
@@ -108,7 +108,7 @@ function CreateAccount(){
             
             
           },
-          body: JSON.stringify({ username, email, password,rePassword }),
+          body: JSON.stringify({ username, email, password}),
           credentials:'include'
         });
   
@@ -118,7 +118,7 @@ function CreateAccount(){
           setEmailHolder('Email already exist');
         }else{
           setUser(data.user)
-          navigate('/');
+          navigate(`/new-avatar-page/${data.user.id}/${data.user.username}`);
         }
         
 

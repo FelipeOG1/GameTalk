@@ -1,7 +1,7 @@
 import React, {useState,useContext} from "react";
 import { useNavigate } from "react-router-dom";
 
-import { UserContext } from "./Context";
+import { UserContext } from "../components/Context";
 
    
 

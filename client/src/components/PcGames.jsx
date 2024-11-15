@@ -116,7 +116,7 @@ function PcGames(){
                         <img onClick={() => { goGamePage(g.id) }} src={g.cover.url.replace('t_thumb', 't_cover_big')} className="h-56 rounded-md" alt={g.name} />
                     </div>
                     <h1 onClick={() => { goGamePage(g.id) }} className="game-title">{g.name}</h1>
-                    <div className="flex flex-row">
+                    <div className="flex flex-row gap-1">
                         <div className={`h-3 w-3 ${g.rating ? getBackgroundColor(g.rating) : getBackgroundColor(0)} flex justify-center items-center rounded-md py-5 px-5`}>
                             <div className='text-center text-white font-semibold text'>{g.rating ? roundedRating(g.rating) : 'N/A'}</div>
                         </div>

@@ -1,54 +1,93 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { UserContext } from "../components/Context";
 
-const AvatarSelection = () => {
+
+
+
+
+const AvatarSelection = (props) => {
+  
   const [avatarUrl, setAvatarUrl] = useState(null);
-  const[username,setUsername]=useState(null);
+  const navigate=useNavigate();
+  const[loading,setLoading]=useState(true);
+ 
+ 
 
-  const handleClick=(name)=>{
-    setUsername(name);
+  const handleAvatar=()=>{
+    
+
+    navigate(`/edit-avatar-page/${props.user.id}/${encodeURIComponent(avatarUrl)}/${props.user.username}`);
   }
 
-  const getAvatarUrl = (style,username,hairColor) => {
-    
-    return `https://api.dicebear.com/9.x/${style}/svg?seed=${username}&hairColor=0e0e0e`
-  };
-  useEffect(() => {
-    const hairColor='ab2a18'
-    setAvatarUrl(getAvatarUrl(username,hairColor));
-  }, [username]);
-  console.log(username)
 
+
+  
+const loadAvatar=async()=>{
+  try {
+    const response = await fetch('http://localhost:3000/myAvatar', {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        throw new Error('Error al obtener los juegos');
+    }
+
+    const data = await response.json();
+    setAvatarUrl(data.myAvatar);
+
+     
+
+} catch (e) {
+    console.error(e.message);
+} finally {
+    setLoading(false); 
+  
+}
+
+
+
+  
+}
+ 
+  
+
+
+
+
+useEffect(()=>{
+  
+
+loadAvatar();
+
+
+
+},[])
+
+console.log(avatarUrl);
+  
+  
+  
+
+  
   return (
     <>
       <div className="flex">
-        <div className="avatar-container">
+        <div className="avatar-container bg-yellow-400">
           <div className="relative h-full w-full">
-            {avatarUrl && <img src={avatarUrl} alt="Avatar" />}
-            <div>
-            
-
+            {!loading && <img src={avatarUrl} alt="Avatar" />}
           </div>
-          </div>
-          
         </div>
-
-     
-       
       </div>
-      <div className='flex gap-7'>
-        <button onClick={()=>handleClick('adventurer')}>Felipe</button>
-        <button onClick={()=>handleClick('pixel-art')}>Monica</button>
-        <button onClick={()=>handleClick('bottts')}>Saul</button>
+
+      <div className="mt-4">
+        <button className="button-6" onClick={handleAvatar}>
+          Edit My avatar
+        </button>
       </div>
     </>
   );
 };
 
 export default AvatarSelection;
-
-
-
-
-
-
-

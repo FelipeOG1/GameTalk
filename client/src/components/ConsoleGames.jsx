@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function GameList(){
+function ConsoleGames(){
     const [covers,setCovers]=useState([]);
     const navigate=useNavigate();
     const [authState,setAuthState]=useState(false);
@@ -145,5 +145,5 @@ function GameList(){
 }
 
 
-export default GameList
+export default ConsoleGames
 

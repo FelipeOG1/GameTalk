@@ -1,8 +1,8 @@
 import React, { Fragment,useState,useEffect,useContext } from 'react';
-import GameList from './GameList';
-import NavBar from './navBar';
-import { UserContext } from './Context';
-import PcGames from './pcGames';
+import ConsoleGames from '../components/ConsoleGames';
+import NavBar from '../components/navBar';
+import { UserContext } from '../components/Context';
+import PcGames from '../components/PcGames';
 
 
 
@@ -47,8 +47,7 @@ function HomePage(){
            <div className="text-center md:text-left">
            
                <p className="text-lg mb-4">Explora una vasta colección de videojuegos, comparte tus opiniones y descubre datos interesantes sobre tus juegos favoritos.</p>
-               <input  type="text" className='mr-3 text-cyan-500' />
-               <a href="#explore" className="bg-cyan-800 py-2 px-3 rounded-md">¡Empieza a explorar!</a>
+               
            </div>
           
        </div>
@@ -57,7 +56,7 @@ function HomePage(){
            
 
           <div>
-          <GameList /> 
+          <ConsoleGames /> 
 
           </div>
 

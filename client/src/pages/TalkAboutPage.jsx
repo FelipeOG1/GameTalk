@@ -1,16 +1,10 @@
 import React,{useState,useContext, useEffect} from "react";
-import RatingBar from "./RatingBar";
-import AudioRecorder from "./AudioRecorder";
-import { UserContext } from "./Context";
-import { Navigate,useNavigate } from "react-router-dom";
-
-
-
-
-
-
-
-
+import RatingBar from "../components/RatingBar";
+import AudioRecorder from "../components/AudioRecorder";
+import { UserContext } from "../components/Context";
+import { Navigate,useNavigate, useSubmit } from "react-router-dom";
+import downSound from '../assets/sounds/down.wav';
+import upSound from '../assets/sounds/up.wav';
 
 
 
@@ -19,9 +13,28 @@ function TalkAbout(props){
     const [modal,setModal]= useState(false);
     const navigate= useNavigate();
     const [ratingScore, setRatingScore] = useState(0);
+    const[rating,setRating]=useState(false)
+    const[currentRating,setCurrentRating]=useState(0);
     const [blop,setBlop]=useState('')
     const[gameId,setGameId]=useState('');
     const[review,setReview]=useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+
+  const handleRecordingStatusChange = (status) => {
+    setIsRecording(status);
+    console.log('Recording status:', status);
+  };
+
+
+
+    const playSound=(sound,volume)=>{
+        const audio=new Audio(sound);
+        audio.volume=volume
+
+        audio.play();
+
+
+    }
 
 
     useEffect(()=>{
@@ -33,10 +46,20 @@ function TalkAbout(props){
     },[gameId])
     
 
-  const handleScoreChange = (newScore) => {
-    setRatingScore(newScore); 
-    console.log(ratingScore) 
-  };
+    const handleScoreChange = (newScore) => {
+        console.log(newScore);
+        setRatingScore(newScore); 
+    
+        if (newScore > currentRating) {  
+            playSound(upSound, 0.1);  
+            setCurrentRating(newScore);  
+        } else if (newScore < currentRating) {  
+            playSound(downSound, 0.1);  
+            setCurrentRating(newScore);  
+        }
+    
+        setRating(true);  
+    };
   const handleBlopChange = (newBlop) => {
     setBlop(newBlop);
     setReview(true);
@@ -44,16 +67,6 @@ function TalkAbout(props){
 };
 
 const sendReview= async ()=>{
-    setReview(false);
-    if(!ratingScore || ! blop){
-        console.log('No blop ')
-        return
-    }
-    
-    
-
-   
-
  setGameId(props.gameId)
   const formData = new FormData();
   formData.append('audio', blop, 'audio.wav');
@@ -69,14 +82,19 @@ const sendReview= async ()=>{
     const response = await fetch('http://localhost:3000/addReview', {
         method: 'POST',
         body: formData,
-        credentials: 'include', // Si necesitas enviar cookies de sesión
+        credentials: 'include', 
     });
     console.log('datos enviados');
     
     const result = await response.json();
+
+
     
 } catch (error) {
     console.error('Error al enviar la reseña:', error);
+}finally{
+    setModal(!modal);
+    setReview(false);
 }
   
 
@@ -103,6 +121,9 @@ const sendReview= async ()=>{
 
         if(user){
             setModal(!modal);
+            setRating(false);
+            setReview(false);
+
                 return 
         }
         navigate('/login');
@@ -126,10 +147,10 @@ const sendReview= async ()=>{
 
     
 <div className="modal">
-<div className="overlay"></div>
+<div className="overlay" onClick={handleModal}></div>
 <div className="modal-content">
 
-                <div className="pt-3 mb-3">
+                <div className="pt-3 mb-5">
                     <h1>Give it a Score form 10 to a 100!</h1>
                     <RatingBar onScoreChange={handleScoreChange}></RatingBar>
 
@@ -137,14 +158,14 @@ const sendReview= async ()=>{
 
                 <div className="pb-3">
                     
-                    <AudioRecorder onChangeBlop={handleBlopChange} > 
+                   {rating && <AudioRecorder onChangeBlop={handleBlopChange} onRecordingStatusChange={handleRecordingStatusChange}/>  } 
 
-                    </AudioRecorder>
+                   
                 </div>
 
 
                 <div>
-                {review==true && <button onClick={sendReview} className='button-6'>Send Review</button>}
+                {review==true && !isRecording && <button onClick={sendReview} className='button-6'>Send Review</button>}
                 </div>
       
 
@@ -153,10 +174,6 @@ const sendReview= async ()=>{
 
     
 
-
-
-
-    <button className="absolute" onClick={handleModal}>Close</button>
 
     
 </div>

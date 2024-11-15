@@ -6,52 +6,55 @@
   font-family: 'Press Start 2P', cursive;
 }
 
-body.active-moda{
-  overflow-y: hidden;
+
+body.active-modal {
+  overflow-y: hidden; 
 }
 
-.modal, .overlay{
-
+.overlay {
   width: 100vw;
   height: 100vh;
+  position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  position: fixed
-
-
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 50;
 }
 
-.modal-content{
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  z-index: 100;
+}
 
+.modal-content {
+  position: relative;
   background-color: white;
   width: 30rem;
+  max-height: 80vh; 
+  overflow-y: auto; 
   text-align: center;
   border-radius: 1rem;
-  padding: 3rem;
-  
+  padding: 2rem;
+  z-index: 200;
 }
 
-.overlay{
-  background: rgba(49,49,49,0.8);
+.modal-cards {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
 }
-
-.modal-cards{
-  
-  width: 90%;
-  margin: 0 auto 2rem auto;
-  -webkit-box-shadow: 6px 10px 12px -11px rgba(0,0,0,0.75);
--moz-box-shadow: 6px 10px 12px -11px rgba(0,0,0,0.75);
-box-shadow: 6px 10px 12px -11px rgba(0,0,0,0.75);
-}
-
-
 
 
 .button-6 {
@@ -245,17 +248,211 @@ background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,58,74,1) 39%, rgba(1
 }
 
 .avatar-container{
-  width: 260px;
-  height: 260px;
-
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  background-color: aquamarine;
   overflow: hidden;
 
 }
 
 .avatar-container img{
-    width: 100%;
+  width: 100%;
   height: 100%;
-object-fit: cover;
+  object-fit: cover;
 }
+
+
+
+.avatar-page{
+
+  min-height: 100vh; 
+  padding-bottom: 20px; 
+  overflow: auto; 
+  background-color: rgb(37 99 235);
+  
+
+}
+
+
+
+.overlay{
+  background: rgba(49,49,49,0.8);
+}
+
+.avatar{
+  padding: 0.5rem;
+  margin: 0.25rem;
+  cursor: pointer;
+
+}
+
+.form__group {
+  position: relative;
+  padding: 20px 0 0;
+  width: 100%;
+  max-width: 180px;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 17px;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+
+.form__field::placeholder {
+  color: transparent;
+}
+
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 17px;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: #9b9b9b;
+  pointer-events: none;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #116399, #38caef);
+  border-image-slice: 1;
+}
+
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: #38caef;
+  font-weight: 700;
+}
+
+
+.form__field:required, .form__field:invalid {
+  box-shadow: none;
+}
+
+
+.find-games-container {
+  min-height: 100vh; 
+  padding-bottom: 20px; 
+  overflow: auto; 
+}
+
+.message {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(124, 120, 120, 0.7);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 18px;
+  opacity: 1;
+  transition: opacity 3s ease-in-out;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+/* From Uiverse.io by andrew-demchenk0 */ 
+.button-recording {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 8px;
+  height: 40px;
+  width: 114px;
+  border: none;
+  background: #1b1b1cde;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.lable {
+  line-height: 20px;
+  font-size: 17px;
+  color: #38caef;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+}
+
+.button-recording:hover {
+  background: #1b1b1c;
+}
+
+.button-recording:hover .svg-icon {
+  animation: scale 1s linear infinite;
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05) rotate(10deg);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.switch {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(60,64,67);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mic-on {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(60,64,67);
+  color: red;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mic-active {
+  background-color: green;
+  color: white;
+}
+
+
+.mic-on {
+  z-index: 4;
+}
+

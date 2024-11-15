@@ -1,16 +1,20 @@
 import React,{useState,useContext,useEffect} from "react";
 import { Navigate, useNavigate } from 'react-router-dom';
-import { UserContext } from "./Context";
-import NavBar from "./navBar";
-import MyGames from "./MyGames";
-import MyReviews from "./MyReviews";
-import AvatarSelection from "./AvatarSelection";
+import { UserContext } from "../components/Context";
+import NavBar from "../components/navBar";
+import MyGames from "../components/MyGames";
+import MyReviews from "../components/MyReviews";
+import AvatarSelection from "../components/AvatarSelection";
 
 
 
 
 
 const MyProfile=()=>{
+
+    const { user } = useContext(UserContext);
+
+
     
 
     return(
@@ -30,7 +34,7 @@ const MyProfile=()=>{
 
         <section className="mt-14">
         
-          <AvatarSelection>
+          <AvatarSelection user={user? user: 'loading'} >
                     
           </AvatarSelection>
            

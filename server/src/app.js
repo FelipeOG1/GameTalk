@@ -137,17 +137,17 @@ app.get('/newGames',async(req,res)=>{
             
           `, { headers: config });
           
-          // Filtrar resultados en el código
+         
           const filteredGames = response.data.filter(game => {
-            // Filtrar juegos con solo una fecha de lanzamiento y que no sean DLCs
+           
             return game.release_dates.length < 3;
           });
           
-          // Mostrar resultados filtrados
-          const timestamp = Math.floor(Date.now() / 1000); // Obtiene el timestamp en segundos
+          
+          const timestamp = Math.floor(Date.now() / 1000); 
           const month=2592000*3
           
-          console.log(timestamp-month);
+        
 
 
 
@@ -183,59 +183,100 @@ if(req.isAuthenticated()){
 
 
 
-app.get('/game-details/:id',async(req,res)=>{
+app.get('/game-details/:id', async (req, res) => {
    
+  
+    const gameId = parseInt(req.params.id, 10);
+    if (isNaN(gameId)) {
+      return res.status(400).json({ error: 'Invalid game ID' });
+    }
+  
+    try {
+      const response = await axios.post(
+        `https://api.igdb.com/v4/games`,
+        `fields name, summary, cover.url, storyline, genres.name,platforms.id, platforms.name, release_dates.platform, rating, release_dates.date, release_dates.human, cover.url,id,videos.video_id, websites.url, rating_count; where id = ${gameId};`,
+        { headers: config }
+      );
+      const game=await response.data[0];
+      
+
+      const platforms = game.platforms ? game.platforms : [];
+      const releaseDates = game.release_dates || [];
+
+       
+        const sortedReleaseDates = releaseDates.sort((a, b) => a.date - b.date);
+        const primaryPlatformId = sortedReleaseDates[0]?.platform;
+        const primaryPlatform = platforms.find((p) => p.id === primaryPlatformId)?.name || 'Unknown';
+        const releaseDate=sortedReleaseDates[0].human;
 
 
-  if(req.isAuthenticated()){
-
-    console.log('naaa');
-
-  }
-
- 
 
 
- 
 
+
+        const setPlatforms= async (plat)=>{
+            if(plat.length>1){
+                const platformsId=plat.map(m=>m.id).join(',');
+                const response=await axios.post(`https://api.igdb.com/v4/platforms`,`fields id, platform_logo.url,name,url;where id = (${platformsId});`,  { headers: config });
+                const platformsLogo=response.data;
+
+                return platformsLogo;
+            
+
+                
+                
     
-    const gameId=req.params.id;
+                
+            }else{
+                return plat;
+            }
 
-    try{
-
-        const response=await axios.post(`https://api.igdb.com/v4/games`, `fields name, summary, cover.url,storyline,genres.name,platforms.name,release_dates.human,involved_companies.company.name,rating, videos.video_id, websites.url,rating_count; where id = ${gameId};`,{headers:config});
-
-        if(req.isAuthenticated()){
-           
-
-            res.json({
-
-                "AuthState":true,
-                "gameDetails":response.data
-            });
-
-
-        }else{
-           
-            res.json({
-
-                "AuthState":false,
-                "gameDetails":response.data
-            });
 
 
         }
-        
 
-        
-    }catch(e){
-        console.error(e.message);
-    }
 
     
-})
+     
+            
 
 
+
+      
+        const platformsLogos = await setPlatforms(platforms);
+
+  
+      if (req.isAuthenticated()) {
+        const { id } = req.user;
+        
+
+         const favoriteGame = await db.query('SELECT EXISTS (SELECT 1 FROM favorites WHERE user_id = $1 AND game_id = $2)', [id, gameId]);
+         const isFavorite = favoriteGame.rows[0].exists;
+  
+        res.json({
+          AuthState: true,
+          isFavorite: isFavorite, 
+          gameDetails: response.data,
+          primaryPlatform:primaryPlatform,
+          releaseDate:releaseDate,
+          platforms: platformsLogos 
+        
+        });
+      } else {
+        res.json({
+          AuthState: false,
+          gameDetails: response.data,
+          primaryPlatform:primaryPlatform,
+          releaseDate:releaseDate,
+          platforms: platformsLogos 
+          
+        });
+      }
+    } catch (e) {
+      console.error(e.message);
+      res.status(500).json({ error: 'Error fetching game details' });
+    }
+  });
 app.get('/user', (req, res) => {
     try {
       
@@ -260,13 +301,66 @@ app.get('/user', (req, res) => {
 
 
 
+  app.get('/findGame/:game', async (req, res) => {
+    const { game } = req.params;
 
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/games',
+            `
+              fields name, platforms.id, platforms.name, release_dates.platform, rating, release_dates.date, cover.url,id;
+              search "${game}";
+              limit 20;
+            `,
+            { headers: config }
+        );
+
+        const games = response.data;
+        console.log(games);
+
+        if (games.length > 0) {
+            const gamesWithPrimaryPlatform = games.map((game) => {
+               
+                const name = game.name || 'Unknown';
+                const platforms = game.platforms ? game.platforms : [];
+                const releaseDates = game.release_dates || [];
+                const coverUrl = game.cover && game.cover.url ? game.cover.url : 'https://via.placeholder.com/200';
+                const rating = typeof game.rating === 'number' ? game.rating.toFixed(1) : 'N/A';
+                const id=game.id || 'Unknown'
+
+              
+                const sortedReleaseDates = releaseDates.sort((a, b) => a.date - b.date);
+                const primaryPlatformId = sortedReleaseDates[0]?.platform;
+                const primaryPlatform = platforms.find((p) => p.id === primaryPlatformId)?.name || 'Unknown';
+
+                return {
+                    name,
+                    platforms: platforms.map((p) => p.name),
+                    primaryPlatform,
+                    cover: coverUrl,
+                    releaseDates:sortedReleaseDates,
+                    rating,
+                    id
+                    
+                };
+            });
+
+            res.json(gamesWithPrimaryPlatform);
+        } else {
+            console.log('No games found');
+            res.status(204).send();
+        }
+    } catch (error) {
+        console.error('Error al obtener los juegos:', error);
+        res.status(500).json({ error: 'Error al obtener los juegos' });
+    }
+});
 
 
 
   app.post('/register',async (req,res)=>{
 
-    const{username,password,email,rePassword}=req.body;
+    const{username,password,email}=req.body;
 
     try{
         const checkEmail= await db.query('SELECT * FROM users where email=$1',[email]);
@@ -344,6 +438,119 @@ app.get('/user', (req, res) => {
    
   })
 
+  app.post('/create-avatar/:id',async (req,res)=>{
+    const {id}=req.params;
+    const {avatarUrl}=req.body;
+
+
+
+    
+
+
+    try{
+
+        const response= await db.query('INSERT INTO avatars(user_id,avatar_url) VALUES ($1,$2)',[id,avatarUrl]);
+        res.status(200).json({  message: 'avatar created successfully',
+
+           
+     });
+        
+
+      
+    
+    
+
+
+
+    }catch(e){
+        console.log(e.message);
+        res.status(400);
+    }
+
+
+
+    
+  })
+
+
+  app.get('/myAvatar',async (req,res)=>{
+
+    if (req.isAuthenticated()) {
+        const { id } = req.user;
+
+        try{
+
+            const response=await db.query('SELECT avatar_url from avatars where user_id=$1',[id])
+
+            if(response.rows.length>0){
+                console.log(response.rows[0]);
+                const url=response.rows[0].avatar_url;
+
+                res.json({
+                    myAvatar: url,
+                })
+
+            }
+
+
+        }catch(e){
+            console.log(e.message);
+        }
+
+    }
+   
+
+
+    
+
+
+  })
+
+
+  app.put('/edit-avatar/:id',async (req,res)=>{
+    const{id}=req.params;
+    const {avatarUrl}=req.body;
+    console.log(id,avatarUrl);
+
+
+    try{
+
+        const response= await db.query('UPDATE avatars SET avatar_url=$1 WHERE user_id=$2',[avatarUrl,id]);
+        res.status(200).json({  message: 'avatar created successfully',
+
+           
+     });
+        
+
+      
+    
+    
+
+
+
+    }catch(e){
+        console.log(e.message);
+        res.status(400);
+    }
+
+
+
+
+    
+    
+
+
+    
+
+
+
+
+
+
+    
+  })
+
+
 
 
   
@@ -369,9 +576,9 @@ app.get('/user', (req, res) => {
 
 
     if(req.isAuthenticated()){
-        const gameId=req.body.id;
+        const gameId=req.body.gameId;
         const userId=req.user.id;
-        console.log(userId)
+        console.log(gameId)
 
         try{
 
@@ -439,7 +646,7 @@ app.get('/user', (req, res) => {
             );
 
             
-            console.log(cover.data)
+            
             res.json(cover.data || []); 
         } catch (e) {
             console.error(e.message);
@@ -516,7 +723,7 @@ app.get('/consoleGames',async (req,res)=>{
 
 
           
-               console.log(response.data)
+               
                res.json(response.data);
 
                
@@ -542,7 +749,7 @@ app.get('/pcGames',async (req,res)=>{
 
 
           
-               console.log(response.data)
+             
                res.json(response.data);
 
                
@@ -556,8 +763,30 @@ app.get('/pcGames',async (req,res)=>{
 })
 
 
+app.delete('/removeGame/:gameId', async (req, res) => {
+    const userId = req.user.id;
+    const { gameId } = req.params;
 
+    try {
+        const response = await db.query('DELETE FROM favorites WHERE user_id=$1 AND game_id=$2', [userId, gameId]);
+        
+        
+        if (response.rowCount > 0) {
+            console.log(`Juego con ID ${gameId} eliminado para el usuario ${userId}`);
+            return res.status(204).send(); 
+        } else {
+            console.log(`No se encontró ningún juego con ID ${gameId} para el usuario ${userId}`);
+            return res.status(404).json({ message: 'Juego no encontrado' });
+        }
 
+    } catch (error) {
+        console.error('Error al eliminar el juego:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+
+    
+  
+});
 
 
 
