@@ -10,7 +10,8 @@ import MyGames from './components/MyGames';
 import MyProfile from './pages/MyProfile';
 import AvatarPage from './pages/AvatarPage';
 import FindGamePage from './pages/FindGamesPage';
-
+import AllReviews from './pages/AllReviews';
+import LatestReviewsPage from './pages/LatestReviewsPage';
 
 
 
@@ -30,6 +31,10 @@ function App() {
         <Route path='/new-avatar-page/:id/:username' element={<AvatarPage state='create' title="Create your own Avatar!"/>}></Route>
         <Route path='/edit-avatar-page/:id/:avatar/:username' element={<AvatarPage state='edit' title="Edit your Current Avatar!"/>}></Route>
         <Route path='/findGame/:game' element={<FindGamePage/>}></Route>
+        <Route path='/allReviews/:id/:gameName' element={<AllReviews/>}></Route>
+        <Route path='/latestReviewsPage' element={<LatestReviewsPage/>}></Route>
+        
+       
       </Routes>
     </Router>
     </UserProvider>

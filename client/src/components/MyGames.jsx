@@ -16,7 +16,7 @@ const MyGames = () => {
 
     const loadData = async () => {
         try {
-            const response = await fetch('http://localhost:3000/myGames', {
+            const response = await fetch('http://localhost:3000/games/userGames', {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -69,16 +69,10 @@ const MyGames = () => {
 
       }
 
-      const scrollLeft = () => {
-        document.getElementById('game-carousel').scrollBy({ left: -300, behavior: 'smooth' });
-    };
-
-    const scrollRight = () => {
-        document.getElementById('game-carousel').scrollBy({ left: 300, behavior: 'smooth' });
-    };
+      
 
 
-console.log(games.length)
+
     
 
 return (
@@ -87,7 +81,8 @@ return (
 
         <section className="mt-10">
             <div className="mb-3">
-            <h1 className="text-2xl font-bold">My Games</h1>
+            <h1 className="text-2xl font-bold mb-3">My Games</h1>
+            <hr />
 
             
         
@@ -95,8 +90,8 @@ return (
 
             </div>
         
-            <div id="game-carousel" className="flex flex-wrap pt-8 gap-3">
-                {!loading && games.map(g => {
+            <div className="flex flex-wrap pt-8 gap-3">
+                {!loading && games.length>0?  games.map(g => {
                     return (
                         <div key={g.id} className="flex-none ">
                             <div className="image-container relative">
@@ -111,7 +106,10 @@ return (
                             </div>
                         </div>
                     );
-                })}
+                }):!loading &&<div> 
+                    
+                    <h1 className="text-2xl font-bold text-black opacity-60">Add some Games to Favorites!</h1>     
+                    </div>}
             </div>
 
 

@@ -7,10 +7,12 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);  
   const [loading, setLoading] = useState(true);  
 
-
+  const logout = () => {
+    setUser(null);  
+  };
   const loadUser = async () => {
     try {
-      const response = await fetch('http://localhost:3000/user', {
+      const response = await fetch('http://localhost:3000/auth/user', {
         method: 'GET',
         credentials: 'include',
       });
@@ -21,6 +23,8 @@ export const UserProvider = ({ children }) => {
       } else {
         setUser(null);  
       }
+
+     
     } catch (error) {
       console.log(error);
       setUser(null);  
@@ -36,7 +40,7 @@ export const UserProvider = ({ children }) => {
 
  
   return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{ user, setUser, loading, logout }}>
       {children}
     </UserContext.Provider>
   );

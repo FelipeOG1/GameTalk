@@ -3,54 +3,23 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function PcGames(){
+function PcGames(props){
     const [covers,setCovers]=useState([]);
     const navigate=useNavigate();
     const [authState,setAuthState]=useState(false);
     const [loading, setLoading] = useState(true);
+   
 
 
-    function goGamePage(id){
-        navigate(`/game-details/${id}`);
-
-    
-
-    }
- 
-      async function loadCovers() {
-  
-        try{
-  
-  
-          const response=await fetch('http://localhost:3000/pcGames', {
-            method: 'GET',
-            credentials: 'include'
-          });
-  
-          const data= await response.json();
-  
-            setCovers(data);
-            
-  
-          
-  
-        }catch(e){
-          console.log(e);
-  
-        }finally{
-          setLoading(false)
-        }
+   
+    function goGamePage(id) {
+       
+      
+        window.location.href = `/game-details/${id}`;
         
-      }
-  console.log(covers);
   
-    
-  
-  
-  
-    useEffect(()=>{
-      loadCovers();
-    },[])
+    }
+      
 
     const getBackgroundColor = (roundedRating) => {
       if (roundedRating >= 75 && roundedRating<=90) return 'bg-cyan-500';
@@ -84,6 +53,10 @@ function PcGames(){
 
 
 
+useEffect(()=>{
+
+  setCovers(props.covers);
+},[])
 
     
   
@@ -96,7 +69,7 @@ function PcGames(){
   
     <section className='w-full relative'>
     
-    <h1 className='text-2xl font-semibold'>Highest Rated Pc Games</h1>
+   
     <div className="absolute right-3 top-3 flex gap-2 z-10">
        
         <button className="bg-black bg-opacity-50 text-white p-2 rounded-full" onClick={scrollLeft}>
@@ -109,10 +82,11 @@ function PcGames(){
     
   
     <div id="game-carousel2" className="flex overflow-x-auto no-scrollbar pt-8 gap-3">
-        {!loading && covers.map(g => {
+        {covers.map(g => {
             return (
                 <div key={g.id} className="flex-none">
                     <div className="image-container relative">
+                        
                         <img onClick={() => { goGamePage(g.id) }} src={g.cover.url.replace('t_thumb', 't_cover_big')} className="h-56 rounded-md" alt={g.name} />
                     </div>
                     <h1 onClick={() => { goGamePage(g.id) }} className="game-title">{g.name}</h1>

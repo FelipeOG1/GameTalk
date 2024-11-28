@@ -73,7 +73,7 @@ const AvatarPage = (props) => {
 
       try{
 
-        const response = await fetch(`http://localhost:3000/create-avatar/${id}`, {
+        const response = await fetch(`http://localhost:3000/avatar/create-avatar/${id}`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ const AvatarPage = (props) => {
 
       try{
 
-        const response = await fetch(`http://localhost:3000/edit-avatar/${id}`, {
+        const response = await fetch(`http://localhost:3000/avatar/edit-avatar/${id}`, {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',

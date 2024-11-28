@@ -25,7 +25,7 @@ const AvatarSelection = (props) => {
   
 const loadAvatar=async()=>{
   try {
-    const response = await fetch('http://localhost:3000/myAvatar', {
+    const response = await fetch('http://localhost:3000/avatar/myAvatar', {
         method: 'GET',
         credentials: 'include'
     });

@@ -22,7 +22,7 @@ const navigate=useNavigate();
 
             try{
 
-                const response = await fetch('http://localhost:3000/addGame', {
+                const response = await fetch('http://localhost:3000/games/addGame', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ const navigate=useNavigate();
         } else {
             try{
 
-                const response = await fetch(`http://localhost:3000/removeGame/${gameId}`,{
+                const response = await fetch(`http://localhost:3000/games/removeGame/${gameId}`,{
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

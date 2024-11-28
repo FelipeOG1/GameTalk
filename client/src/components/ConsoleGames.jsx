@@ -11,7 +11,9 @@ function ConsoleGames(){
 
 
     function goGamePage(id){
-        navigate(`/game-details/${id}`);
+
+        
+        window.location.href = `/game-details/${id}`;
 
     
 
@@ -22,7 +24,7 @@ function ConsoleGames(){
         try{
   
   
-          const response=await fetch('http://localhost:3000/consoleGames', {
+          const response=await fetch('http://localhost:3000/games/consoleGames', {
             method: 'GET',
             credentials: 'include'
           });
@@ -42,7 +44,7 @@ function ConsoleGames(){
         }
         
       }
-  console.log(covers);
+
   
     
   
@@ -96,7 +98,6 @@ function ConsoleGames(){
   
     <section className='w-full relative'>
     
-    <h1 className='text-2xl font-semibold'>Highest Rated Console Games</h1>
     <div className="absolute right-3 top-3 flex gap-2 z-10">
        
         <button className="bg-black bg-opacity-50 text-white p-2 rounded-full" onClick={scrollLeft}>

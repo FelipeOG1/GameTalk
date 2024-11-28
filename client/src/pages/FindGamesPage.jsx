@@ -21,7 +21,7 @@ const FindGamePage=()=>{
 
     const handleClick=(id)=>{
 
-        navigate(`/game-details/${id}`);
+      window.location.href = `/game-details/${id}`;
 
 
 
@@ -30,7 +30,7 @@ const FindGamePage=()=>{
 
     const loadGames = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/findGame/${game}`, {
+          const response = await fetch(`http://localhost:3000/games/findGame/${game}`, {
             method: 'GET',
             credentials: 'include'
           });

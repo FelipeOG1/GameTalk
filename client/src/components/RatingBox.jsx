@@ -21,7 +21,7 @@ const RatingBox=(props)=>{
     const favorableState=(rating)=>{
         if (rating >= 75 && rating<=90) return 'Generally Favorable';
         if (rating >= 50 && rating<=75) return 'Mixed';
-        if(rating >=90) return 'Favorable';
+        if(rating >=90) return 'Universal Acclaim';
     
        
   
@@ -33,9 +33,9 @@ const RatingBox=(props)=>{
 
 
        
-        <div className={`h-16 w-16 ${props.rating == "N/A" ? `border-2 border-gray-400 ${getBackgroundColor(0)}` : getBackgroundColor(roundedRating)} flex justify-center items-center rounded-md`}>
-        <div className={`text-center font-semibold ${props.rating == "N/A" ? 'text-4xl font-bold text-black' : 'text-4xl text-white'}`}>
-          {props.rating == "N/A" ? 'tbd' : roundedRating}
+        <div className={`h-16 w-16 ${props.rating <1  ? `border-2 border-gray-400 ${getBackgroundColor(0)}` : getBackgroundColor(roundedRating)} flex justify-center items-center rounded-md`}>
+        <div className={`text-center font-semibold ${props.rating < 1 ? 'text-4xl font-bold text-black' : 'text-4xl text-white'}`}>
+          {props.rating <1 ? 'tbd' : roundedRating}
         </div>
       </div>
        

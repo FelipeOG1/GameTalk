@@ -73,31 +73,57 @@ const sendReview= async ()=>{
   formData.append('score',ratingScore);
   formData.append('gameId',gameId)
 
- 
 
-  
-
-
-  try {
-    const response = await fetch('http://localhost:3000/addReview', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include', 
-    });
-    console.log('datos enviados');
+if(!props.isReviewed){
+    try {
+        const response = await fetch('http://localhost:3000/reviews/addReview', {
+            method: 'POST',
+            body: formData,
+            credentials: 'include', 
+        });
+        console.log('datos enviados');
+        
+        const result = await response.json();
     
-    const result = await response.json();
+    
+        
+    } catch (error) {
+        console.error('Error al enviar la reseña:', error);
+    }finally{
+        setModal(!modal);
+        setReview(false);
+        navigate(0);
+    }
+      
+     
+
+}else if(props.isReviewed){
+
+    try {
+        const response = await fetch('http://localhost:3000/reviews/edit-review', {
+            method: 'PUT',
+            body: formData,
+            credentials: 'include', 
+        });
+        console.log('datos enviados');
+        
+        const result = await response.json();
+    
+    
+        
+    } catch (error) {
+        console.error('Error al enviar la reseña:', error);
+    }finally{
+        setModal(!modal);
+        setReview(false);
+        navigate(0);
+    }
+      
 
 
     
-} catch (error) {
-    console.error('Error al enviar la reseña:', error);
-}finally{
-    setModal(!modal);
-    setReview(false);
 }
   
-
   
 
  
@@ -106,11 +132,6 @@ const sendReview= async ()=>{
 
            
     
-
-
-
-
-
 
 
 }
@@ -142,7 +163,7 @@ const sendReview= async ()=>{
     return(
       <>
 
-<button className="button-6 hover:bg-cyan-500 duration-500 " onClick={handleModal}>Talk About this Game!</button>
+<button className="button-6 hover:bg-cyan-500 duration-500" onClick={handleModal}>{props.isReviewed? 'Edit your Review!':'Talk About this Game!'}</button>
  {modal &&(
 
     
@@ -151,7 +172,7 @@ const sendReview= async ()=>{
 <div className="modal-content">
 
                 <div className="pt-3 mb-5">
-                    <h1>Give it a Score form 10 to a 100!</h1>
+                    <h1>Hover and click to give a rating!</h1>
                     <RatingBar onScoreChange={handleScoreChange}></RatingBar>
 
                 </div>
@@ -165,7 +186,7 @@ const sendReview= async ()=>{
 
 
                 <div>
-                {review==true && !isRecording && <button onClick={sendReview} className='button-6'>Send Review</button>}
+                {review==true && !isRecording && <button onClick={sendReview} className='button-6'>{props.isReviewed? 'Edit your Review':'Send Review!'}</button>}
                 </div>
       
 
