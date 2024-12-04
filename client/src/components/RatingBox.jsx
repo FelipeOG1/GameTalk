@@ -33,9 +33,9 @@ const RatingBox=(props)=>{
 
 
        
-        <div className={`h-16 w-16 ${props.rating <1  ? `border-2 border-gray-400 ${getBackgroundColor(0)}` : getBackgroundColor(roundedRating)} flex justify-center items-center rounded-md`}>
-        <div className={`text-center font-semibold ${props.rating < 1 ? 'text-4xl font-bold text-black' : 'text-4xl text-white'}`}>
-          {props.rating <1 ? 'tbd' : roundedRating}
+        <div className={`h-16 w-16 ${props.rating== null  ? `border-2 border-gray-400 ${getBackgroundColor(0)}` : getBackgroundColor(roundedRating)} flex justify-center items-center rounded-md`}>
+        <div className={`text-center font-semibold ${props.rating == null ? 'text-4xl font-bold text-black' : 'text-4xl text-white'}`}>
+          {props.rating ==null ? 'tbd' : roundedRating}
         </div>
       </div>
        

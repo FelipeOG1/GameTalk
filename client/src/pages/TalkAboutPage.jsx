@@ -5,6 +5,7 @@ import { UserContext } from "../components/Context";
 import { Navigate,useNavigate, useSubmit } from "react-router-dom";
 import downSound from '../assets/sounds/down.wav';
 import upSound from '../assets/sounds/up.wav';
+import Footer from "../components/Footer";
 
 
 
@@ -205,7 +206,7 @@ if(!props.isReviewed){
 )}
 
       
-            
+
             </>
 
 

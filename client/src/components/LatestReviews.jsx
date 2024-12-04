@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 const LatestReviews = ({ gameName, gameId, setAverageScore, setNumberReviews }) => {
   const [reviews, setReviews] = useState([]);
   
-
   const [latestReviews,setLatestReviews]=useState([]);
   const navigate=useNavigate();
 
@@ -28,6 +27,8 @@ navigate(`/allReviews/${gameId}/${gameName}`);
 
       const rev=data.data;
 
+      console.log(data.data)
+
       if(rev){
         for (let i = 0; i <= 2; i++) {
           if (rev[i] && rev[i].avatar_url) {
@@ -38,12 +39,13 @@ navigate(`/allReviews/${gameId}/${gameName}`);
         setReviews(rev);
         setAverageScore(data.averageScore);
         setNumberReviews(data.numberReviews);
+   
 
         
 
       }
 
-      
+     
       
 
 

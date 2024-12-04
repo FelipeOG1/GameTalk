@@ -26,7 +26,7 @@ db
   .connect()
   .then(client => {
     console.log('Connected to the database successfully');
-    client.release(); // Libera la conexión de prueba al pool
+    client.release(); 
   })
   .catch(err => console.error('Database connection error:', err.stack));
 

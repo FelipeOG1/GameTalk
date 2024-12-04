@@ -5,6 +5,7 @@ import NavBar from "../components/navBar";
 import MyGames from "../components/MyGames";
 import MyReviews from "../components/MyReviews";
 import AvatarSelection from "../components/AvatarSelection";
+import Footer from "../components/Footer";
 
 
 
@@ -72,9 +73,13 @@ const MyProfile=()=>{
 
 
         
-        
-        
+            <div>
+       
+      </div>
         </div>
+
+        <Footer/>
+       
         </>
     )
 

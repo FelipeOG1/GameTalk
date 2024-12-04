@@ -1,5 +1,7 @@
 import {React,useState,useEffect, Fragment} from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import NavBar from "../components/navBar";
+import Footer from "../components/Footer";
 
 
 
@@ -13,8 +15,15 @@ const LatestReviewsPage=()=>{
     const [reviews,setReviews]=useState([]);
     const[loading,setLoading]=useState(false);
 
+    const navigate=useNavigate();
 
 
+    const goGamePage=(id)=>{
+
+
+        navigate(`/game-details/${id}`);
+
+    }
 
 
     const loadLatestReviews=async ()=>{
@@ -58,7 +67,12 @@ const LatestReviewsPage=()=>{
 
 
 
-console.log(reviews);
+
+
+
+
+
+
 
 
 
@@ -137,7 +151,9 @@ console.log(reviews);
 
             </div>
 
-
+            <div>
+        <Footer/>
+      </div>
         </Fragment>
     )
 

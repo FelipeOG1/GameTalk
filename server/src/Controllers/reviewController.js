@@ -45,7 +45,10 @@ const addReview = async (req, res) => {
   
     try {
       const reviews = await reviewService.getGameReviews(gameId);
+    
       res.json(reviews);
+
+      
 
       
     } catch (error) {

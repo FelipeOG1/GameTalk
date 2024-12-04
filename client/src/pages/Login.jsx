@@ -2,6 +2,7 @@ import React, {useState,useContext} from "react";
 import { useNavigate } from "react-router-dom";
 
 import { UserContext } from "../components/Context";
+import Footer from "../components/Footer";
 
    
 
@@ -108,10 +109,10 @@ function Login(){
         } else {
             
             if (data.error === 'Invalid credentials') {
-              setErrorMessage('Incorrect username or password');
+              setErrorMessage('Incorrect email or password');
 
             } else {
-              setErrorMessage('Incorrect username or password');
+              setErrorMessage('Incorrect email or password');
             }
         }
     } catch (error) {
@@ -130,9 +131,7 @@ function Login(){
     return(
 
         <>
-        <div className="">
-
-        </div>
+       
 
         <div className="login-container">
         <h1 onClick={handleCLick} className=" cursor-pointer text-4xl font-bold mt-5 bg-black py-4 px-3 rounded hover:bg-cyan-500 duration-500 text-white" id="homeButton">GameTalk</h1>
@@ -218,7 +217,9 @@ function Login(){
         
         
         
-        
+        <div>
+        <Footer/>
+      </div>
         
         </>
     )

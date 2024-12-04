@@ -8,13 +8,13 @@ import AddGameButton from '../components/AddGameButton';
 import { UserContext } from "../components/Context";
 import PcGames from '../components/PcGames';
 import RatingBox from '../components/RatingBox';
-
+import Footer from '../components/Footer';
 function GamePage() {
   const { id } = useParams();
   const { user } = useContext(UserContext);
   const [gameData, setGameData] = useState([]);
   const { state } = useLocation();
-  const [loading, setLoading] = useState(true); // El estado inicial es "loading" = true
+  const [loading, setLoading] = useState(true); 
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [primaryPlatform, setPrimaryPlatform] = useState('');
@@ -22,8 +22,13 @@ function GamePage() {
   const [platforms, setPlatforms] = useState([]);
   const [isReviewed, setIsReviewed] = useState(false);
   const [similarGames, setSimilarGames] = useState([]);
-  const [averageScore, setAverageScore] = useState(0);
+  const [averageScore, setAverageScore] = useState(null);
   const [numberReviews, setNumberReviews] = useState(0);
+  const [unixRelease,setUnixRelease]= useState(0);
+  const [validGame,setValidGame]=useState(null);
+  const currentDate= Math.floor(Date.now() / 1000); 
+
+  
 
   async function loadData(controller) {
     try {
@@ -40,15 +45,33 @@ function GamePage() {
       setReleaseDate(data.releaseDate);
       setPlatforms(data.platforms);
       setSimilarGames(data.similarGames);
+      
+    if (data.releaseDateUnix.date < currentDate) {
+      setValidGame(true);
+    } else {
+      setValidGame(false);
+    }
 
-      setLoading(false); // Marcar como cargado
+
+
+      
+
+
+
+
+      setLoading(false); 
     } catch (e) {
       console.error(e.message);
-      setLoading(false); // En caso de error también cambiar a "false"
+      setLoading(false); 
     }
   }
 
-  useEffect(() => {
+  
+
+  
+
+
+  useEffect( () => {
     const controller = new AbortController();
 
     
@@ -60,15 +83,27 @@ function GamePage() {
     setPlatforms([]);
     setSimilarGames([]);
     setLoading(true);
+    
 
     loadData(controller); 
+
+    
+  
+    
+    
+
+    
+
+
+    
 
     return () => {
       controller.abort();
     };
   }, [id]);
-console.log(numberReviews);
-  
+
+
+  console.log(averageScore)
   if (loading) {
 
     return null; 
@@ -83,12 +118,19 @@ console.log(numberReviews);
     return 'bg-cyan-900';
   };
 
+if(!loading){
+  console.log(validGame)
+}
+ 
+
+
+  
   return (
     <Fragment>
       <NavBar />
 
       <div className='w-full'>
-      <div className='w-8/12 m-auto mt-16 flex rounded-md game-shadow'>
+      <div className='w-8/12 m-auto mt-16 flex  rounded-md game-shadow'>
   
   <div className='w-9/12'>
     {gameData.videos ? (
@@ -128,13 +170,20 @@ console.log(numberReviews);
      </div>
     </div>
 
+
+
+
+
+
+    
+
    
     <div className='flex justify-between mb-3'>
 
       
       <div>
         <h2 className='font-bold'>GAMETALK RATING</h2>
-        <p className='underline'>Based on {numberReviews} Critic Reviews</p>
+        {numberReviews>0? <p className='underline'>Based on {numberReviews} Critic Reviews</p> : <p className='underline'>GameTalk ratings are not available yet</p> }
       </div>
 
      <div>
@@ -151,10 +200,15 @@ console.log(numberReviews);
       )}
     </div>
 
-  <div className='mb-3'>
+
+   
+   {validGame && <div className='mb-3'>
   <TalkAbout gameId={id} isReviewed={isReviewed} />
 
-  </div>
+  </div>  }
+    
+
+  
     
   </div>
 </div>
@@ -167,7 +221,9 @@ console.log(numberReviews);
         <div className='mb-3 pb-5'>
           <h1 className='font-bold text-3xl'>Latest Reviews</h1>
           <hr className='mb-5' />
-          <LatestReviews gameName={gameData.name} setAverageScore={setAverageScore} setNumberReviews={setNumberReviews} gameId={id} />
+
+          
+          {validGame? <LatestReviews gameName={gameData.name} setAverageScore={setAverageScore} setNumberReviews={setNumberReviews} gameId={id} />: <h1 className='text-2xl font-bold text-black opacity-60'>Game not yet released</h1>}
         </div>
 
         <div className='pb-5'>
@@ -175,6 +231,11 @@ console.log(numberReviews);
           <hr />
           {similarGames.length > 0 && <PcGames covers={similarGames} />}
         </div>
+      </div>
+
+
+      <div>
+        <Footer/>
       </div>
     </Fragment>
   );

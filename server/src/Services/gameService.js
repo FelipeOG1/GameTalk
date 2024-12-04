@@ -9,16 +9,31 @@ const fetchGames = async (searchQuery) => {
   try {
       const response = await axios.post(
           `https://api.igdb.com/v4/games`,
-          `fields name, platforms.name, release_dates.date, cover.url, rating, id; search "${searchQuery}"; limit 20;`,
+          `fields name, platforms.name, platforms.id, release_dates.date, cover.url, rating, id, release_dates.platform, release_dates.human; search "${searchQuery}"; limit 20;`,
           { headers: config }
       );
 
-      return response.data.map((game) => ({
+
+  const games=await response.data;
+
+
+
+
+      
+  
+
+      return games.map((game) => ({
+        
+      
+
+
           name: game.name || 'Unknown',
           platforms: game.platforms?.map((p) => p.name) || [],
           cover: game.cover?.url || 'https://via.placeholder.com/200',
-          rating: typeof game.rating === 'number' ? game.rating.toFixed(1) : 0,
+          rating: typeof game.rating === 'number' ? game.rating.toFixed(1) : null,
           id: game.id || 'Unknown',
+
+          releaseDate: game.release_dates?.sort((a,b)=>a.date-b.date) || null
       }));
   } catch (error) {
       console.error('Error fetching games:', error.message);
@@ -66,6 +81,7 @@ const fetchGameDetails = async (gameId, req) => {
     const primaryPlatformId = sortedReleaseDates[0]?.platform;
     const primaryPlatform = game.platforms?.find(p => p.id === primaryPlatformId)?.name || 'Unknown';
     const releaseDate = sortedReleaseDates[0]?.human || 'N/A';
+    const releaseDateUnix=sortedReleaseDates[0] || 'N/A';
   
     const genres = game.genres?.map(g => g.id) || [];
     const genreQuery = genres.length ? `genres = (${genres.join(',')})` : '';
@@ -92,6 +108,7 @@ const fetchGameDetails = async (gameId, req) => {
       releaseDate,
       platforms: platformsLogos,
       similarGames,
+      releaseDateUnix
     };
   };
 

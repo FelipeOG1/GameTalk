@@ -74,7 +74,16 @@ const getGameReviews = async (gameId) => {
         [gameId]
       );
 
-      const data=response.rows;
+      const data= await response.rows;
+
+      if (data.length === 0) {
+        return null;
+      }
+
+
+      
+
+      
       let score=0;
       const amount=data.length;
 
@@ -94,8 +103,8 @@ const getGameReviews = async (gameId) => {
       return {
 
         data,
-        numberReviews: amount,
-        averageScore:averageScore
+        numberReviews: amount || null,
+        averageScore:averageScore || null
 
 
       }

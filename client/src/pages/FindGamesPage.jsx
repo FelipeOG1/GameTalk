@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import NavBar from '../components/navBar';
 import RatingBox from "../components/RatingBox";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 
 
@@ -73,7 +74,7 @@ const FindGamePage=()=>{
         
     },[game]);
 
-    console.log(error)
+    console.log(gameData)
 
 
     return(
@@ -107,7 +108,8 @@ const FindGamePage=()=>{
           <img src={g.cover.replace('t_thumb', 't_cover_big')} alt={`${g.name} cover`} className="w-20 h-auto rounded-lg" />
         </div>
         <div className="flex flex-col justify-between ml-3">
-          <h1 className="text-xl font-semibold">{g.name}</h1>
+          <h1 className="text-xl font-semibold mb-3">{g.name}</h1>
+          {g.releaseDate && <h1 className="text-sm ">{g.releaseDate[0].human}</h1>}
           <div>
             <h2 className="text-sm text-gray-500">{g.primaryPlatform}</h2>
           </div>
@@ -144,7 +146,9 @@ const FindGamePage=()=>{
 
         
         
-        
+        <div>
+        <Footer/>
+      </div>
       
         </>
     )

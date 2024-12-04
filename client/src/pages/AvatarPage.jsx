@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import Footer from "../components/Footer";
 
 const AvatarPage = (props) => {
   const {id,username,avatar}=useParams();
@@ -155,15 +156,15 @@ const AvatarPage = (props) => {
       setSkinColor(params.get('skinColor') || 'ecad80');
       setHairstyle(params.get('hair') || 'short03');
       setMouth(params.get('mouth') || 'variant01');
-      setEye(params.get('eyes') || 'variant01'); // Establece un valor predeterminado para los ojos si no está presente
+      setEye(params.get('eyes') || 'variant01'); 
   
       setAvatarUrl(avatar);
       setIsInitialized(true);
     }
-  }, [avatar, props.state, isInitialized]); // Ejecuta este efecto solo cuando `avatar` o `props.state` cambian
+  }, [avatar, props.state, isInitialized]); 
   
   useEffect(() => {
-    // Solo se actualizará el avatar cuando cambien los parámetros relevantes
+    
     if (props.state === 'edit' && isInitialized) {
       setAvatarUrl(getAvatarUrl(username, hairColor, skinColor, hairstyle, mouth, eye));
     }
@@ -343,7 +344,16 @@ return (
           Save Avatar
         </button>
       </div>
+
+
+     
+
+    
     </div>
+
+  
+
+    
   </>
 );
 };

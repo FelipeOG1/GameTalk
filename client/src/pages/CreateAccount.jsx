@@ -1,6 +1,7 @@
 import React, {useState,useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../components/Context";
+import Footer from "../components/Footer";
 
 
    
@@ -42,6 +43,19 @@ function CreateAccount(){
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
       };
+
+      const validatePassword = (password)=>{
+        const passwordRegex=  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+        return passwordRegex.test(password)
+
+
+
+
+      }
+
+
+      
     
       const validateForm = () => {
         const newErrors = {};
@@ -64,30 +78,52 @@ function CreateAccount(){
 
 
         }
-        if (!password){
-            newErrors.password = 'Password is required';
-            setPassHolder('Password is required')
+        if(password.length<8){
+
+          newErrors.passLength='Password must be at least 8 characters long.'
+          setPassHolder('Password must be at least 8 characters long.');
+          setPassword('')
 
 
-        } 
-        if(!rePassword){
-            newErrors.rePassword='Re-password is required';
-            setReHolder('Re-password is required');
-            
-            
-        }
-        if(password!=rePassword){
+
+
+
+        }else if(!validatePassword(password)){
+
+          newErrors.password='Password must include at least one letter, one number, and one special character.'
+          setPassHolder('Must include a letter, number, and symbol.')
+          setPassword('')
+        }else if (!rePassword){
+          newErrors.rePassword='Re-password is required';
+          setReHolder('Re-password is required');
+          setPassword('')
+          
+
+
+        }else if (password!=rePassword){
+          newErrors.rePassword='Re-password is required';
+          setReHolder('Re-password is required');
           newErrors.noMatch='Passwords dont match';
           setReHolder('Passwords must match');
           setPassHolder('Passwords must match');
           setRePassword('');
           setPassword('');
           
-        }
+
+
+        } 
+       
+        
+
+       
+
+
+
 
         
     
         setErrors(newErrors);
+        console.log(errors)
         
         return Object.keys(newErrors).length === 0;
       };
@@ -113,11 +149,13 @@ function CreateAccount(){
         });
   
         const data = await response.json();
-        if(data=='0'){
+
+        console.log(data)
+        if(response.status==409){
           setEmail('');
           setEmailHolder('Email already exist');
         }else{
-          setUser(data.user)
+           setUser(data.user)
           navigate(`/new-avatar-page/${data.user.id}/${data.user.username}`);
         }
         
@@ -141,6 +179,9 @@ function CreateAccount(){
 
         <>
 
+
+      
+
         <div className="login-container">
         <h1 onClick={handleCLick} className=" cursor-pointer text-4xl font-bold mt-5 bg-black py-4 px-3 rounded hover:bg-cyan-500 duration-500 text-white">GameTalk</h1>
         
@@ -159,7 +200,8 @@ function CreateAccount(){
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder={userHolder}
-        className="w-full border-2 border-black rounded "
+        className="w-full rounded bg-cyan-100 "
+        maxLength={30}
         
 
         
@@ -176,7 +218,8 @@ function CreateAccount(){
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder={emailHolder}
-        className="w-full border-2 border-black rounded"
+        className="w-full rounded bg-cyan-100"
+        maxLength={254}
 
        
       />
@@ -195,7 +238,8 @@ function CreateAccount(){
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder={passHolder}
-        className="w-full rounded border-2 border-black"
+        className="w-full rounded bg-cyan-100"
+        maxLength={64}
         
        
     
@@ -214,7 +258,8 @@ function CreateAccount(){
   value={rePassword}
   onChange={(e) => setRePassword(e.target.value)}
   placeholder={reHolder}
-  className="w-full rounded border-2 border-black"
+  className="w-full rounded bg-cyan-100"
+  maxLength={64}
   
  
 
@@ -238,15 +283,17 @@ function CreateAccount(){
             
 
 
-
-
+ 
 
         </div>
         
         
-        
-        
-        
+       
+        <div>
+        <Footer/>
+      </div>
+       
+       
         </>
     )
 

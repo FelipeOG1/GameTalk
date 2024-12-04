@@ -2,6 +2,8 @@ import { useState,useEffect, Fragment} from "react";
 import { useParams } from "react-router-dom";
 import NavBar from "../components/navBar";
 
+import Footer from "../components/Footer";
+
 
 const AllReviews=()=>{
 
@@ -147,11 +149,14 @@ const getBackgroundColor = (roundedRating) => {
 
 
 
+
+
             </div>
 
 
 
-
+            <Footer/>
+         
 
 
 

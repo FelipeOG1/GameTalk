@@ -4,7 +4,7 @@ import NavBar from '../components/navBar';
 import { UserContext } from '../components/Context';
 import PcGames from '../components/PcGames';
 import UpComingGames from '../components/upComingGames';
-
+import Footer from '../components/Footer';
 
 
 function HomePage(){
@@ -140,16 +140,15 @@ function HomePage(){
 
           </div>
 
-          <header className="gradient text-white p-6 mb-5 mt-5 pb-36 rounded">
-         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
-           <div className="text-center md:text-left">
-           
-               <p className="text-lg mb-4">Explora una vasta colección de videojuegos, comparte tus opiniones y descubre datos interesantes sobre tus juegos favoritos.</p>
-               
-           </div>
-          
-       </div>
-   </header>
+          <section class="hero-background text-white py-20 px-5 text-center mb-3 rounded-sm ">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-4xl font-bold mb-4">Share Your Gaming Thoughts, Your Way</h1>
+    <p class="text-lg mb-6">
+    At GameTalk, reviews come to life! Record and share your opinions about your favorite games with voice memos.
+    </p>
+   
+  </div>
+</section>
            
 
           <div>
@@ -169,14 +168,16 @@ function HomePage(){
           
            
 
+        
 
 
             </div>
 
 
-           
-            
-
+            <div>
+        <Footer/>
+      </div>
+         
         </Fragment>
        
            
